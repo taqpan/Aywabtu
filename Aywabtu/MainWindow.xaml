@@ -1,0 +1,125 @@
+﻿<Window x:Class="Aywabtu.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="grid_2.ico"
+        Title="All your window are blong to us."
+        Height="500" Width="700"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        Loaded="MainWindow_OnLoaded">
+    <Window.InputBindings>
+        <KeyBinding Key="A" Modifiers="Control"
+                    Command="{Binding ArrangeCommand}"/>
+        <KeyBinding Key="F" Modifiers="Control"
+                    Command="{Binding ScanCommand}"/>
+        <KeyBinding Key="S" Modifiers="Control"
+                    Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="O" Modifiers="Control"
+                    Command="{Binding LoadCommand}"/>
+    </Window.InputBindings>
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+            <Button Command="{Binding ArrangeCommand}" Width="72"
+                    IsTabStop="False">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/icon-move.png" Width="16" Height="16"/>
+                        <TextBlock Text="Arrange" Margin="4,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding ScanCommand}" Width="72"
+                    IsTabStop="False">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/icon-scope-scan.png" Width="16" Height="16"/>
+                        <TextBlock Text="Scan" Margin="4,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Separator/>
+            <Button Command="{Binding LoadCommand}" Width="72"
+                    IsTabStop="False">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/icon-openfolderalt.png" Width="16" Height="16"/>
+                        <TextBlock Text="Open" Margin="4,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button Command="{Binding SaveCommand}" Width="72"
+                    IsTabStop="False">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/icon-save-floppy.png" Width="16" Height="16"/>
+                        <TextBlock Text="Save" Margin="4,0"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </ToolBar>
+        <DataGrid Name="grid" TabIndex="0" Focusable="True"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}"
+                  IsSynchronizedWithCurrentItem="False"
+                  AutoGenerateColumns="False" CanUserAddRows="False"
+                  RowHeaderWidth="26" SelectionMode="Single"
+                  AlternatingRowBackground="Azure"
+                  GridLinesVisibility="All"
+                  HorizontalGridLinesBrush="LightGray"
+                  VerticalGridLinesBrush="LightGray">
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Insert"
+                            Command="{Binding NewEntryCommand}"/>
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ProcessNameRegex}"
+                                    Header="Process Name (regex)"
+                                    Width="160"/>
+                <DataGridTextColumn Binding="{Binding WindowNameRegex}"
+                                    Header="Window Name (regex)"
+                                    Width="230"/>
+                <DataGridTextColumn Binding="{Binding Left}"
+                                    Header="Left"
+                                    Width="54"/>
+                <DataGridTextColumn Binding="{Binding Top}"
+                                    Header="Top"
+                                    Width="54"/>
+                <DataGridTextColumn Binding="{Binding Width}"
+                                    Header="Width"
+                                    Width="54"/>
+                <DataGridTextColumn Binding="{Binding Height}"
+                                    Header="Height"
+                                    Width="54"/>
+                <DataGridTemplateColumn Width="32">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DeleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                    CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}">
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border x:Name="bd">
+                                                        <Image x:Name="img"
+                                                               Source="Resources/icon-remove.png"
+                                                               Width="16" Height="16"
+                                                               Opacity="0.2"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="img" Property="Opacity" Value="1"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
